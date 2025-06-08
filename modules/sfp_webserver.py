@@ -123,8 +123,10 @@ class sfp_webserver(SpiderFootPlugin):
         if cookies and 'JSESSIONID' in cookies:
             tech.append("Java/JSP")
 
-        if cookies and 'ASP.NET' in cookies:
-            tech.append("ASP.NET")
+        if cookies:
+            cookie_pairs = [cookie.strip().split('=') for cookie in cookies.split(';')]
+            if any(cookie[0] == 'ASP.NET' for cookie in cookie_pairs if len(cookie) > 1):
+                tech.append("ASP.NET")
 
         if '.asp' in eventSource:
             tech.append("ASP")
